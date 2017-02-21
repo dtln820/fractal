@@ -25,9 +25,9 @@ int   main(int argc, char *argv[])
   int height, width;
   int max;
 
-  max = 100;
-  height = 480;
-  width = 640;
+  max = 500;
+  height = 720;
+  width = 1280;
   int colors[max];
   ft_makecolors(max, colors);
   mlx = mlx_init();

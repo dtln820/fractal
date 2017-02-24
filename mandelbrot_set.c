@@ -1,8 +1,5 @@
 #include "a_fractal.h"
 
-void *mlx;
-void *win;
-
 void ft_makecolors(int max, int *colors)
 {
   int i;

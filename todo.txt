@@ -1,6 +1,7 @@
 https://en.wikipedia.org/wiki/Mandelbrot_set
 http://jonisalonen.com/2013/lets-draw-the-mandelbrot-set/
 https://plus.maths.org/content/computing-mandelbrot-set
+http://lodev.org/cgtutor/juliamandelbrot.html
 
 Left click = 1
 Right click = 2

@@ -5,6 +5,7 @@
 # include <stdlib.h>
 # include <math.h>
 # include <stdio.h>
+# include <time.h>
 
 typedef struct    s_wnd
 {
@@ -13,11 +14,10 @@ typedef struct    s_wnd
   int height;
   int width;
   int max;
-  int limit;
-  int cx;
-  int cy;
+  double moveX;
+  double moveY;
   int *colors;
-  double scale;
+  double zoom;
 }                 t_wnd;
 
 #endif

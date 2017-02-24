@@ -18,6 +18,8 @@ typedef struct    s_wnd
   double moveY;
   int *colors;
   double zoom;
+  int prevx;
+  int prevy;
 }                 t_wnd;
 
 #endif

@@ -62,20 +62,30 @@ int mouse_hook(int button, int x, int y, void *vws)
 	if (button == 1)
 	{
 		ws->zoom *= 1.2;
-		if (x > ws->width / 2)
+		if (x > ws->width / 2 && x != ws->prevx)
 			ws->moveX += x * 0.0003;
-		else if (x < ws->width / 2)
+		else if (x < ws->width / 2 && x != ws->prevx)
 			ws->moveX -= x * 0.0003;
-		if (y > ws->height / 2)
+		if (y > ws->height / 2 && y != ws->prevy)
 			ws->moveY += y * 0.0003;
-		else if (y < ws->height / 2)
+		else if (y < ws->height / 2 && y != ws->prevy)
 			ws->moveY -= y * 0.0003;
+		ws->prevx = x;
+		ws->prevy = y;
 	}
 	else if (button == 2)
 	{
-		//ws->moveX = x;
-		//ws->moveY = y;
 		ws->zoom /= 1.2;
+		if (x > ws->width / 2 && x != ws->prevx)
+			ws->moveX += x * 0.0003;
+		else if (x < ws->width / 2 && x != ws->prevx)
+			ws->moveX -= x * 0.0003;
+		if (y > ws->height / 2 && y != ws->prevy)
+			ws->moveY += y * 0.0003;
+		else if (y < ws->height / 2 && y != ws->prevy)
+			ws->moveY -= y * 0.0003;
+		ws->prevx = x;
+		ws->prevy = y;
 	}
 	else
 		return 0;

@@ -63,11 +63,11 @@ int mouse_hook(int button, int x, int y, void *vws)
 	{
 		ws->zoom *= 1.2;
 		if (x > ws->width / 2 && x != ws->prevx)
-			ws->moveX += x * 0.0003;
+			ws->moveX += x * 0.0001;
 		else if (x < ws->width / 2 && x != ws->prevx)
 			ws->moveX -= x * 0.0003;
 		if (y > ws->height / 2 && y != ws->prevy)
-			ws->moveY += y * 0.0003;
+			ws->moveY += y * 0.00025;
 		else if (y < ws->height / 2 && y != ws->prevy)
 			ws->moveY -= y * 0.0003;
 		ws->prevx = x;

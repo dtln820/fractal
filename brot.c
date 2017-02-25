@@ -1,4 +1,4 @@
-#include "b_fractal.h"
+#include "a_fractal.h"
 
 void ft_makecolors(int max, int *colors)
 {
@@ -19,48 +19,37 @@ int ft_drawmset(void *vws)
 	t_wnd *ws;
 
 	ws = (t_wnd*)vws;
-	mlx_clear_window(ws->mlx, ws->win);
-	int lp;
-	double ax, ay, a1, b1, a2, b2;
-	for (int x = -400; x < 399; x++)
+	double pr, pi;
+	double newRe, newIm, oldRe, oldIm;
+	for (int y = 0; y < ws->height; y++)
 	{
-		for (int y = -300; y < 299; y++)
+		for (int x = 0; x < ws->width; x++)
 		{
-			ax = ws->cx + x * ws->scale;
-			ay = ws->cy + y * ws->scale;
-			a1 = ax;
-			b1 = ay;
-			lp = 0;
-
-			while (lp <= 1000 && ((a1 * a1) + (b1 * b1)) < ws->limit)
+			pr = 1.5 * (x - ws->width / 2) / (0.5 * ws->width * ws->zoom) + ws->moveX;
+			pi = (y - ws->height / 2) / (0.5 * ws->height * ws->zoom) + ws->moveY;
+			newRe = newIm = oldRe = oldIm = 0;
+			int i;
+			for (i = 0; i <= ws->max; i++)
 			{
-				a2 = a1 * a1 - b1 * b1 + ax;
-				b2 = 2 * a1 * b1 + ay;
-				a1 = a2;
-				b1 = b2;
-				lp++;
+				oldRe = newRe;
+				oldIm = newIm;
+				newRe = oldRe * oldRe - oldIm * oldIm + pr;
+				newIm = 2 * oldRe * oldIm + pi;
+				if ((newRe * newRe + newIm * newIm) > 4) break;
 			}
-			if (lp > 1000)
-				mlx_pixel_put(ws->mlx, ws->win, x + 400, y + 300, 0x000000);
+			if (i > ws->max)
+				mlx_pixel_put(ws->mlx, ws->win, x, y, 0x000000);
 			else
-				mlx_pixel_put(ws->mlx, ws->win, x + 400, y + 300, ws->colors[lp]);
+				mlx_pixel_put(ws->mlx, ws->win, x, y, ws->colors[i]); // (i % 256 * 255 * 255)
 		}
 	}
-}
-
-void ft_fillstruct(t_wnd *ws)
-{
-	ws->mlx = mlx_init();
-	ws->width = 800;
-	ws->height = 600;
-	ws->win = mlx_new_window(ws->mlx, 800, 600, "Fractal");
-	ws->limit = 20;
-	ws->max = 1000;
-	ws->scale = 0.005;
-	ws->cx = 0;
-	ws->cy = 0;
-	ws->colors = (int*)malloc(sizeof(int) * ws->max);
-	ft_makecolors(ws->max, ws->colors);
+	printf("moveX = %f\n", ws->moveX);
+	printf("moveY = %f\n", ws->moveY);
+	printf("pr = %f pi = %f\n", pr, pi);
+	printf("ws->width / 2 = %d\n", ws->width + 1 / 2);
+	printf("ws->width * 0.5 = %f\n", ws->width + 1 * 0.5);
+	mlx_pixel_put(ws->mlx, ws->win, ws->prevx, ws->prevy, 0xFFFFFF);
+	return 0;
 }
 
 int mouse_hook(int button, int x, int y, void *vws)
@@ -70,21 +59,51 @@ int mouse_hook(int button, int x, int y, void *vws)
 	ws = (t_wnd*)vws;
 	printf("button = %d\n", button);
 	printf("x = %d y = %d\n", x, y);
-	if (button == 1)
+	if (button == 4)
 	{
-		ws->cx = ws->cx + ws->scale * (x - 400);
-		ws->cy = ws->cy + ws->scale * (y - 300);
-		ws->scale = ws->scale / 2;
+		ws->zoom *= 1.2;
+		if (x > ws->width / 2 && x != ws->prevx)
+			ws->moveX += x * 0.0001;
+		else if (x < ws->width / 2 && x != ws->prevx)
+			ws->moveX -= x * 0.0003;
+		if (y > ws->height / 2 && y != ws->prevy)
+			ws->moveY += y * 0.00025;
+		else if (y < ws->height / 2 && y != ws->prevy)
+			ws->moveY -= y * 0.0003;
+		ws->prevx = x;
+		ws->prevy = y;
 	}
-	else if (button == 2)
+	else if (button == 5)
 	{
-		ws->cx = ws->cx - ws->scale * (x - 400);
-		ws->cy = ws->cy - ws->scale * (y - 300);
-		ws->scale = ws->scale * 2;
+		ws->zoom /= 1.2;
+		if (x > ws->width / 2 && x != ws->prevx)
+			ws->moveX += x * 0.0001;
+		else if (x < ws->width / 2 && x != ws->prevx)
+			ws->moveX -= x * 0.0003;
+		if (y > ws->height / 2 && y != ws->prevy)
+			ws->moveY += y * 0.00025;
+		else if (y < ws->height / 2 && y != ws->prevy)
+			ws->moveY -= y * 0.0003;
+		ws->prevx = x;
+		ws->prevy = y;
 	}
 	else
 		return 0;
 	return (ft_drawmset(ws));
+}
+
+void ft_fillstruct(t_wnd *ws)
+{
+	ws->width = 800;
+	ws->height = 600;
+	ws->mlx = mlx_init();
+	ws->win = mlx_new_window(ws->mlx, ws->width, ws->height, "Fractal");
+	ws->max = 128;
+	ws->moveX = -0.5;
+	ws->moveY = 0;
+	ws->colors = (int*)malloc(sizeof(int) * ws->max);
+	ws->zoom = 1;
+	ft_makecolors(ws->max + 1, ws->colors);
 }
 
 int main()
@@ -93,7 +112,6 @@ int main()
 
 	ws = malloc(sizeof(t_wnd));
 	ft_fillstruct(ws);
-	ft_drawmset(ws);
 	mlx_mouse_hook(ws->win, &mouse_hook, ws);
 	mlx_expose_hook(ws->win, &ft_drawmset, ws);
 	mlx_loop(ws->mlx);

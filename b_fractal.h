@@ -13,13 +13,14 @@ typedef	struct	s_wnd
 	int height;
 	void *mlx;
 	void *win;
-	double cx;
-	double cy;
-	double scale;
-	int limit;
-	double a1, b1, a2, b2;
+	long double cx;
+	long double cy;
+	long double scale;
+	long double limit;
+	long double a1, b1, a2, b2;
 	int x, y;
-	double ax, ay;
+	long double ax, ay;
+	int zoomnr;
 }				t_wnd;
 
 #endif

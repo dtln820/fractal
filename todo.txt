@@ -3,7 +3,7 @@ http://jonisalonen.com/2013/lets-draw-the-mandelbrot-set/
 https://plus.maths.org/content/computing-mandelbrot-set
 http://lodev.org/cgtutor/juliamandelbrot.html
 
-Left click = 1
-Right click = 2
-Up = 4
-Down = 5
+https://www.youtube.com/watch?v=W1QLASmQW6Y
+http://stackoverflow.com/questions/16124127/improvement-to-my-mandelbrot-set-code
+http://stackoverflow.com/questions/34852707/how-do-i-zoom-on-cursor-position-in-mandelbrot-or-julia-set
+http://stackoverflow.com/questions/41796832/smooth-zoom-with-mouse-in-mandelbrot-set-c

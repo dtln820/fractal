@@ -8,16 +8,18 @@
 
 typedef	struct	s_wnd
 {
-	void *mlx;
-	void *win;
-	int cx;
-	int cy;
+	int maxIterations;
 	int width;
 	int height;
-	int limit;
-	int max;
-	int *colors;
+	void *mlx;
+	void *win;
+	double cx;
+	double cy;
 	double scale;
+	int limit;
+	double a1, b1, a2, b2;
+	int x, y;
+	double ax, ay;
 }				t_wnd;
 
 #endif

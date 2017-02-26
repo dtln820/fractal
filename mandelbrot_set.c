@@ -49,6 +49,7 @@ int ft_drawmset(void *vws)
 	printf("ws->width / 2 = %d\n", ws->width + 1 / 2);
 	printf("ws->width * 0.5 = %f\n", ws->width + 1 * 0.5);
 	mlx_pixel_put(ws->mlx, ws->win, ws->width / 2, ws->height / 2, 0xFFFFFF);
+	printf("prevx = %d prevy = %d\n", ws->prevx, ws->prevy);
 	return 0;
 }
 
@@ -103,6 +104,8 @@ void ft_fillstruct(t_wnd *ws)
 	ws->moveY = 0;
 	ws->colors = (int*)malloc(sizeof(int) * ws->max);
 	ws->zoom = 1;
+	ws->prevx = 0;
+	ws->prevy = 0;
 	ft_makecolors(ws->max + 1, ws->colors);
 }
 

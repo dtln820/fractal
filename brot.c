@@ -1,17 +1,16 @@
-#include "a_fractal.h"
+#include "b_fractal.h"
 
-void ft_makecolors(int max, int *colors)
+void ft_fillstruct(t_wnd *ws)
 {
-	int i;
-	int basecolor;
-
-	basecolor = 1651275;
-	i = 0;
-	while (i < max)
-	{
-		colors[i] = basecolor + i * 10;
-		i++;
-	}
+	ws->width = 640;
+	ws->height = 480;
+	ws->mlx = mlx_init();
+	ws->win = mlx_new_window(ws->mlx, ws->width, ws->height, "Mandelbrot Set");
+	ws->cx = 0;
+	ws->cy = 0;
+	ws->scale = 0.005;
+	ws->limit = 4;
+	ws->maxIterations = 255;
 }
 
 int ft_drawmset(void *vws)
@@ -19,36 +18,29 @@ int ft_drawmset(void *vws)
 	t_wnd *ws;
 
 	ws = (t_wnd*)vws;
-	double pr, pi;
-	double newRe, newIm, oldRe, oldIm;
-	for (int y = 0; y < ws->height; y++)
+	for (int x = -1 * ws->width / 2; x < ws->width / 2 - 1; x++)
 	{
-		for (int x = 0; x < ws->width; x++)
+		for(int y = -1 * ws->height / 2; y < ws->height / 2; y++)
 		{
-			pr = 1.5 * (x - ws->width / 2) / (0.5 * ws->width * ws->zoom) + ws->moveX;
-			pi = (y - ws->height / 2) / (0.5 * ws->height * ws->zoom) + ws->moveY;
-			newRe = newIm = oldRe = oldIm = 0;
-			int i;
-			for (i = 0; i <= ws->max; i++)
+			ws->ax = ws->cx + x * ws->scale;
+			ws->ay = ws->cy + y * ws->scale;
+			ws->a1 = ws->ax;
+			ws->b1 = ws->ay;
+			int i = 0;
+			while (i < ws->maxIterations && ((ws->a1 * ws->a1) + (ws->b1 * ws->b1)) < ws->limit)
 			{
-				oldRe = newRe;
-				oldIm = newIm;
-				newRe = oldRe * oldRe - oldIm * oldIm + pr;
-				newIm = 2 * oldRe * oldIm + pi;
-				if ((newRe * newRe + newIm * newIm) > 4) break;
+				i++;
+				ws->a2 = ws->a1 * ws->a1 - ws->b1 * ws->b1 + ws->ax;
+				ws->b2 = 2 * ws->a1 * ws->b1 + ws->ay;
+				ws->a1 = ws->a2;
+				ws->b1 = ws->b2;
 			}
-			if (i > ws->max)
-				mlx_pixel_put(ws->mlx, ws->win, x, y, 0x000000);
+			if (i >= ws->maxIterations)
+				mlx_pixel_put(ws->mlx, ws->win, x + ws->width / 2, y + ws->height / 2, 0x000000);
 			else
-				mlx_pixel_put(ws->mlx, ws->win, x, y, ws->colors[i]); // (i % 256 * 255 * 255)
+				mlx_pixel_put(ws->mlx, ws->win, x + ws->width / 2, y + ws->height / 2, 0xFFFFFF);
 		}
 	}
-	printf("moveX = %f\n", ws->moveX);
-	printf("moveY = %f\n", ws->moveY);
-	printf("pr = %f pi = %f\n", pr, pi);
-	printf("ws->width / 2 = %d\n", ws->width + 1 / 2);
-	printf("ws->width * 0.5 = %f\n", ws->width + 1 * 0.5);
-	mlx_pixel_put(ws->mlx, ws->win, ws->prevx, ws->prevy, 0xFFFFFF);
 	return 0;
 }
 
@@ -57,59 +49,31 @@ int mouse_hook(int button, int x, int y, void *vws)
 	t_wnd *ws;
 
 	ws = (t_wnd*)vws;
-	printf("button = %d\n", button);
-	printf("x = %d y = %d\n", x, y);
 	if (button == 4)
 	{
-		ws->zoom *= 1.2;
-		if (x > ws->width / 2 && x != ws->prevx)
-			ws->moveX += x * 0.0001;
-		else if (x < ws->width / 2 && x != ws->prevx)
-			ws->moveX -= x * 0.0003;
-		if (y > ws->height / 2 && y != ws->prevy)
-			ws->moveY += y * 0.00025;
-		else if (y < ws->height / 2 && y != ws->prevy)
-			ws->moveY -= y * 0.0003;
-		ws->prevx = x;
-		ws->prevy = y;
+		printf("Zoom in!\n");
+		ws->cx = ws->cx + ws->scale * (x - (ws->width / 2));
+		ws->cy = ws->cy + ws->scale * (y - (ws->height / 2));
+		ws->scale = ws->scale / 2;
+		return (ft_drawmset(ws));
 	}
 	else if (button == 5)
 	{
-		ws->zoom /= 1.2;
-		if (x > ws->width / 2 && x != ws->prevx)
-			ws->moveX += x * 0.0001;
-		else if (x < ws->width / 2 && x != ws->prevx)
-			ws->moveX -= x * 0.0003;
-		if (y > ws->height / 2 && y != ws->prevy)
-			ws->moveY += y * 0.00025;
-		else if (y < ws->height / 2 && y != ws->prevy)
-			ws->moveY -= y * 0.0003;
-		ws->prevx = x;
-		ws->prevy = y;
+		printf("Zoom out!\n");
+		ws->cx = ws->cx - ws->scale * (x - (ws->width / 2));
+		ws->cy = ws->cy - ws->scale * (y - (ws->height / 2));
+		ws->scale = ws->scale * 2;
+		return (ft_drawmset(ws));
 	}
 	else
-		return 0;
-	return (ft_drawmset(ws));
-}
-
-void ft_fillstruct(t_wnd *ws)
-{
-	ws->width = 800;
-	ws->height = 600;
-	ws->mlx = mlx_init();
-	ws->win = mlx_new_window(ws->mlx, ws->width, ws->height, "Fractal");
-	ws->max = 128;
-	ws->moveX = -0.5;
-	ws->moveY = 0;
-	ws->colors = (int*)malloc(sizeof(int) * ws->max);
-	ws->zoom = 1;
-	ft_makecolors(ws->max + 1, ws->colors);
+		printf("Pressed some shit\n");
+	return 0;
 }
 
 int main()
 {
 	t_wnd *ws;
-
+	
 	ws = malloc(sizeof(t_wnd));
 	ft_fillstruct(ws);
 	mlx_mouse_hook(ws->win, &mouse_hook, ws);

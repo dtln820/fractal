@@ -1,5 +1,19 @@
 #include "b_fractal.h"
 
+void ft_makecolors(int max, int *colors)
+{
+	int i;
+	int basecolor;
+
+	basecolor = 0x2E8B57; // !0xe74c3c 0xd35400 0xf1c40f 0x9e9e9e !0x795548
+	i = 0;
+	while (i < max)
+	{
+		colors[i] = basecolor + i * 10;
+		i++;
+	}
+}
+
 void ft_fillstruct(t_wnd *ws)
 {
 	ws->width = 640;
@@ -10,8 +24,9 @@ void ft_fillstruct(t_wnd *ws)
 	ws->cy = 0;
 	ws->scale = 0.005;
 	ws->limit = 4;
-	ws->zoomnr = 0;
 	ws->maxIterations = 255;
+	ws->colors = (int*)malloc(sizeof(int) * ws->maxIterations);
+	ft_makecolors(ws->maxIterations, ws->colors);
 }
 
 int ft_drawmset(void *vws)
@@ -28,7 +43,7 @@ int ft_drawmset(void *vws)
 			ws->a1 = ws->ax;
 			ws->b1 = ws->ay;
 			int i = 0;
-			while (i < ws->maxIterations && ((ws->a1 * ws->a1) + (ws->b1 * ws->b1)) < ws->limit)
+			while (i < ws->maxIterations && ((ws->a1 * ws->a1) + (ws->b1 * ws->b1)) < (1 << 16))
 			{
 				i++;
 				ws->a2 = ws->a1 * ws->a1 - ws->b1 * ws->b1 + ws->ax;
@@ -39,12 +54,7 @@ int ft_drawmset(void *vws)
 			if (i >= ws->maxIterations)
 				mlx_pixel_put(ws->mlx, ws->win, x + ws->width / 2, y + ws->height / 2, 0x000000);
 			else
-			{
-				double z = sqrt(ws->a2 * ws->a2 + ws->b2 * ws->b2);
-				int brightness = 256.0 * log2(1.75 + i - log2(log2(z))) / log2((double)ws->maxIterations);
-				int color = brightness * brightness * 255;
-				mlx_pixel_put(ws->mlx, ws->win, x + ws->width / 2, y + ws->height / 2, color);
-			}
+				mlx_pixel_put(ws->mlx, ws->win, x + ws->width / 2, y + ws->height / 2, ws->colors[i]);
 		}
 	}
 	return 0;
@@ -86,11 +96,17 @@ int key_hook(int k, void *vws)
 	if (k == 113)
 	{
 		ws->maxIterations += 250;
+		free(ws->colors);
+		ws->colors = (int*)malloc(sizeof(int) * ws->maxIterations);
+		ft_makecolors(ws->maxIterations, ws->colors);
 		return (ft_drawmset(ws));
 	}
 	else if (k == 101)
 	{
 		ws->maxIterations -= 250;
+		free(ws->colors);
+		ws->colors = (int*)malloc(sizeof(int) * ws->maxIterations);
+		ft_makecolors(ws->maxIterations, ws->colors);
 		return (ft_drawmset(ws));
 	}
 	else

@@ -20,7 +20,7 @@ typedef	struct	s_wnd
 	long double a1, b1, a2, b2;
 	int x, y;
 	long double ax, ay;
-	int zoomnr;
+	int *colors;
 }				t_wnd;
 
 #endif

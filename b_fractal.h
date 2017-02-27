@@ -13,12 +13,15 @@ typedef	struct	s_wnd
 	int height;
 	void *mlx;
 	void *win;
+	void *image;
+	int bits;
+	int sizel;
+	int endi;
+	char *im_buf;
 	long double cx;
 	long double cy;
 	long double scale;
-	long double limit;
 	long double a1, b1, a2, b2;
-	int x, y;
 	long double ax, ay;
 	int *colors;
 }				t_wnd;

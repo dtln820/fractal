@@ -1,2 +1,2 @@
-gcc mandelbrot_set.c -lmlx -framework OpenGL -framework AppKit
+gcc brot.c -lmlx -framework OpenGL -framework AppKit
 echo "Compiled!"

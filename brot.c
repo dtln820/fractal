@@ -9,24 +9,35 @@ void ft_makecolors(int max, int *colors)
 	i = 0;
 	while (i < max)
 	{
-		colors[i] = basecolor + i * 10;
+		colors[i] = basecolor + i * 5;
 		i++;
 	}
 }
 
 void ft_fillstruct(t_wnd *ws)
 {
-	ws->width = 640;
-	ws->height = 480;
+	ws->width = 800;
+	ws->height = 600;
 	ws->mlx = mlx_init();
 	ws->win = mlx_new_window(ws->mlx, ws->width, ws->height, "Mandelbrot Set");
+	ws->image = mlx_new_image(ws->mlx, ws->width, ws->height);
+	ws->im_buf = mlx_get_data_addr(ws->image, &(ws->bits), &(ws->sizel), &(ws->endi));
 	ws->cx = 0;
 	ws->cy = 0;
 	ws->scale = 0.005;
-	ws->limit = 4;
-	ws->maxIterations = 255;
+	ws->maxIterations = 200;
 	ws->colors = (int*)malloc(sizeof(int) * ws->maxIterations);
 	ft_makecolors(ws->maxIterations, ws->colors);
+}
+
+void ft_putpixel(t_wnd *ws, int x, int y, int color)
+{
+	int i;
+
+	i = x * ws->bits / 8 + y * ws->sizel;
+	ws->im_buf[i] = color & 0xFF;
+	ws->im_buf[i + 1] = (color & 0xFF00) >> 8;
+	ws->im_buf[i + 2] = (color & 0xFF0000) >> 16;
 }
 
 int ft_drawmset(void *vws)
@@ -34,6 +45,10 @@ int ft_drawmset(void *vws)
 	t_wnd *ws;
 
 	ws = (t_wnd*)vws;
+	mlx_destroy_image(ws->mlx, ws->image);
+	ws->image = mlx_new_image(ws->mlx, ws->width, ws->height);
+	//free(ws->im_buf);
+	ws->im_buf = mlx_get_data_addr(ws->image, &(ws->bits), &(ws->sizel), &(ws->endi));
 	for (int x = -1 * ws->width / 2; x < ws->width / 2; x++)
 	{
 		for(int y = -1 * ws->height / 2; y < ws->height / 2; y++)
@@ -52,11 +67,14 @@ int ft_drawmset(void *vws)
 				ws->b1 = ws->b2;
 			}
 			if (i >= ws->maxIterations)
-				mlx_pixel_put(ws->mlx, ws->win, x + ws->width / 2, y + ws->height / 2, 0x000000);
+				//mlx_pixel_put(ws->mlx, ws->win, x + ws->width / 2, y + ws->height / 2, 0x000000);
+				ft_putpixel(ws, x + ws->width / 2, y + ws->height / 2, 0x000000);
 			else
-				mlx_pixel_put(ws->mlx, ws->win, x + ws->width / 2, y + ws->height / 2, ws->colors[i]);
+				//mlx_pixel_put(ws->mlx, ws->win, x + ws->width / 2, y + ws->height / 2, ws->colors[i]);
+				ft_putpixel(ws, x + ws->width / 2, y + ws->height / 2, ws->colors[i]);
 		}
 	}
+	mlx_put_image_to_window(ws->mlx, ws->win, ws->image, 0, 0);
 	return 0;
 }
 
@@ -67,7 +85,6 @@ int mouse_hook(int button, int x, int y, void *vws)
 	ws = (t_wnd*)vws;
 	if (button == 4)
 	{
-		ws->zoomnr = ws->zoomnr + 1;
 		printf("Zoom in!\n");
 		ws->cx = ws->cx + ws->scale * (x - (ws->width / 2));
 		ws->cy = ws->cy + ws->scale * (y - (ws->height / 2));
@@ -77,8 +94,8 @@ int mouse_hook(int button, int x, int y, void *vws)
 	else if (button == 5)
 	{
 		printf("Zoom out!\n");
-		ws->cx = ws->cx - ws->scale * (x - (ws->width / 2));
-		ws->cy = ws->cy - ws->scale * (y - (ws->height / 2));
+		ws->cx = ws->cx + ws->scale * (x - (ws->width / 2));
+		ws->cy = ws->cy + ws->scale * (y - (ws->height / 2));
 		ws->scale = ws->scale * 2;
 		return (ft_drawmset(ws));
 	}
@@ -93,22 +110,24 @@ int key_hook(int k, void *vws)
 
 	ws = (t_wnd*)vws;
 	printf("pressed k = %d\n", k);
-	if (k == 113)
+	if (k == 12)
 	{
-		ws->maxIterations += 250;
+		ws->maxIterations += 50;
 		free(ws->colors);
 		ws->colors = (int*)malloc(sizeof(int) * ws->maxIterations);
 		ft_makecolors(ws->maxIterations, ws->colors);
 		return (ft_drawmset(ws));
 	}
-	else if (k == 101)
+	else if (k == 14)
 	{
-		ws->maxIterations -= 250;
+		ws->maxIterations -= 50;
 		free(ws->colors);
 		ws->colors = (int*)malloc(sizeof(int) * ws->maxIterations);
 		ft_makecolors(ws->maxIterations, ws->colors);
 		return (ft_drawmset(ws));
 	}
+	else if (k == 53)
+		exit(1);
 	else
 		return 0;
 }
@@ -116,7 +135,7 @@ int key_hook(int k, void *vws)
 int main()
 {
 	t_wnd *ws;
-	
+
 	ws = malloc(sizeof(t_wnd));
 	ft_fillstruct(ws);
 	mlx_key_hook(ws->win, &key_hook, ws);

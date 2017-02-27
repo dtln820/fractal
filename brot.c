@@ -9,7 +9,7 @@ void ft_makecolors(int max, int *colors)
 	i = 0;
 	while (i < max)
 	{
-		colors[i] = basecolor + i * 5;
+		colors[i] = basecolor + i * 10;
 		i++;
 	}
 }

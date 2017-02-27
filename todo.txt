@@ -7,6 +7,7 @@ https://www.youtube.com/watch?v=W1QLASmQW6Y
 http://stackoverflow.com/questions/16124127/improvement-to-my-mandelbrot-set-code
 http://stackoverflow.com/questions/34852707/how-do-i-zoom-on-cursor-position-in-mandelbrot-or-julia-set
 http://stackoverflow.com/questions/41796832/smooth-zoom-with-mouse-in-mandelbrot-set-c
+https://gogs.ded.eelon.moe/Lon/Fractol/src/a08d26dc2f6251dac35300c3938bd5dc800c006b/mlx/macos/mlx_new_image.m
 
 [!] Use images to improve speed
 [!] Julia set

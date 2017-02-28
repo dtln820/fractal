@@ -69,7 +69,7 @@ int ft_drawmset(void *vws)
 			if (i >= ws->maxIterations)
 				ft_putpixel(ws, x + ws->width / 2, y + ws->height / 2, 0x000000);
 			else
-				ft_putpixel(ws, x + ws->width / 2, y + ws->height / 2, ws->colors[i]);
+				ft_putpixel(ws, x + ws->width / 2, y + ws->height / 2, i % 256);
 		}
 	}
 	mlx_put_image_to_window(ws->mlx, ws->win, ws->image, 0, 0);

@@ -1,0 +1,2 @@
+gcc brot.c -lmlx -framework OpenGL -framework AppKit
+echo "Mandelbrot Compiled!"

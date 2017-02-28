@@ -14,3 +14,5 @@ https://gogs.ded.eelon.moe/Lon/Fractol/src/a08d26dc2f6251dac35300c3938bd5dc800c0
 [!] Another Fractal
 [?] Play more with smooth coloring
 [?] Play more with zoom coordinates
+
+http://lodev.org/cgtutor/juliamandelbrot.html

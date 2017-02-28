@@ -5,7 +5,7 @@ void ft_makecolors(int max, int *colors)
 	int i;
 	int basecolor;
 
-	basecolor = 0x2E8B57; // !0xe74c3c 0xd35400 0xf1c40f 0x9e9e9e !0x795548
+	basecolor = 1651275; // !0xe74c3c 0xd35400 0xf1c40f 0x9e9e9e !0x795548
 	i = 0;
 	while (i < max)
 	{
@@ -25,6 +25,7 @@ void ft_fillstruct(t_wnd *ws)
 	ws->cx = 0;
 	ws->cy = 0;
 	ws->scale = 0.005;
+	ws->decincvar = 50;
 	ws->maxIterations = 200;
 	ws->colors = (int*)malloc(sizeof(int) * ws->maxIterations);
 	ft_makecolors(ws->maxIterations, ws->colors);
@@ -52,10 +53,10 @@ int ft_drawmset(void *vws)
 	{
 		for(int y = -1 * ws->height / 2; y < ws->height / 2; y++)
 		{
-			ws->ax = ws->cx + x * ws->scale;
-			ws->ay = ws->cy + y * ws->scale;
-			ws->a1 = ws->ax;
-			ws->b1 = ws->ay;
+			ws->ax = -0.8;
+			ws->ay = 0.156;
+			ws->a1 = ws->cx + x * ws->scale;
+			ws->b1 = ws->cy + y * ws->scale;
 			int i = 0;
 			while (i < ws->maxIterations && ((ws->a1 * ws->a1) + (ws->b1 * ws->b1)) <  (1 << 16))
 			{
@@ -66,10 +67,8 @@ int ft_drawmset(void *vws)
 				ws->b1 = ws->b2;
 			}
 			if (i >= ws->maxIterations)
-				//mlx_pixel_put(ws->mlx, ws->win, x + ws->width / 2, y + ws->height / 2, 0x000000);
 				ft_putpixel(ws, x + ws->width / 2, y + ws->height / 2, 0x000000);
 			else
-				//mlx_pixel_put(ws->mlx, ws->win, x + ws->width / 2, y + ws->height / 2, ws->colors[i]);
 				ft_putpixel(ws, x + ws->width / 2, y + ws->height / 2, ws->colors[i]);
 		}
 	}

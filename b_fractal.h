@@ -23,6 +23,7 @@ typedef	struct	s_wnd
 	long double scale;
 	long double a1, b1, a2, b2;
 	long double ax, ay;
+	int decincvar;
 	int *colors;
 }				t_wnd;
 

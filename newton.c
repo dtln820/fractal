@@ -24,8 +24,8 @@ void ft_fillstruct(t_wnd *ws)
 	ws->im_buf = mlx_get_data_addr(ws->image, &(ws->bits), &(ws->sizel), &(ws->endi));
 	ws->cx = 0;
 	ws->cy = 0;
-	ws->ax = -0.8;
-	ws->ay = 0.156;
+	ws->ax = 0.4;
+	ws->ay = 0.4;
 	ws->scale = 0.005;
 	ws->decincvar = 50;
 	ws->maxIterations = 200;
@@ -78,8 +78,8 @@ int ft_drawmset(void *vws)
 			while (i < ws->maxIterations && ((ws->a1 * ws->a1) + (ws->b1 * ws->b1)) <  (1 << 16))
 			{
 				i++;
-				ws->a2 = ws->a1 * ws->a1 - ws->b1 * ws->b1 + ws->ax;
-				ws->b2 = 2 * ws->a1 * ws->b1 + ws->ay;
+				ws->a2 = ws->a1 * ws->a1 * ws->a1 - 3 * ws->a1 * ws->b1 * ws->b1 + ws->ax;
+				ws->b2 = 3 * ws->a1 * ws->a1 * ws->b1 - ws->b1 * ws->b1 * ws->b1 + ws->ay;
 				ws->a1 = ws->a2;
 				ws->b1 = ws->b2;
 			}

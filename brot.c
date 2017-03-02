@@ -5,7 +5,7 @@ void ft_makecolors(int max, int *colors)
 	int i;
 	int basecolor;
 
-	basecolor = 0x2E8B57; // !0xe74c3c 0xd35400 0xf1c40f 0x9e9e9e !0x795548
+	basecolor = 0x2E8B57;
 	i = 0;
 	while (i < max)
 	{
@@ -14,7 +14,7 @@ void ft_makecolors(int max, int *colors)
 	}
 }
 
-void ft_fillstruct(t_wnd *ws)
+void ft_fillm(t_wnd *ws)
 {
 	ws->width = 1280;
 	ws->height = 720;
@@ -26,6 +26,9 @@ void ft_fillstruct(t_wnd *ws)
 	ws->cy = 0;
 	ws->scale = 0.005;
 	ws->maxIterations = 200;
+	ws->decincvar = 50;
+	ws->col_type = 0;
+	ws->mmotion = 0;
 	ws->colors = (int*)malloc(sizeof(int) * ws->maxIterations);
 	ft_makecolors(ws->maxIterations, ws->colors);
 }
@@ -40,38 +43,74 @@ void ft_putpixel(t_wnd *ws, int x, int y, int color)
 	ws->im_buf[i + 2] = (color & 0xFF0000) >> 16;
 }
 
+void ft_showinfo(t_wnd *ws)
+{
+	mlx_string_put(ws->mlx, ws->win, 5, 10, 0xFFFFFF, "INFO");
+	mlx_string_put(ws->mlx, ws->win, 15, 30, 0xFFFFFF, "Coloring: ");
+	if (ws->col_type == 1)
+		mlx_string_put(ws->mlx, ws->win, 150, 30, 0xFFFFFF, "ON");
+	else
+		mlx_string_put(ws->mlx, ws->win, 150, 30, 0xFFFFFF, "OFF");
+	mlx_string_put(ws->mlx, ws->win, 15, 50, 0xFFFFFF, "Mouse impact: ");
+	if (ws->mmotion == 1)
+		mlx_string_put(ws->mlx, ws->win, 150, 50, 0xFFFFFF, "ON");
+	else
+		mlx_string_put(ws->mlx, ws->win, 150, 50, 0xFFFFFF, "OFF");
+}
+
+void ft_getcolor(int x, int y, int i, t_wnd *ws)
+{
+	if (i >= ws->maxIterations)
+		ft_putpixel(ws, x + ws->width / 2, y + ws->height / 2, 0x000000);
+	else if (ws->col_type == 0)
+		ft_putpixel(ws, x + ws->width / 2, y + ws->height / 2, i % 256);
+	else
+		ft_putpixel(ws, x + ws->width / 2, y + ws->height / 2, ws->colors[i]);
+}
+
+void ft_drawmixel(t_wnd *ws, int x, int y)
+{
+	int i;
+
+	i = 0;
+	while (i < ws->maxIterations && ((ws->a1 * ws->a1) + (ws->b1 * ws->b1)) <  (1 << 16))
+	{
+		i++;
+		ws->a2 = ws->a1 * ws->a1 - ws->b1 * ws->b1 + ws->ax;
+		ws->b2 = 2 * ws->a1 * ws->b1 + ws->ay;
+		ws->a1 = ws->a2;
+		ws->b1 = ws->b2;
+	}
+	ft_getcolor(x, y, i, ws);
+}
+
 int ft_drawmset(void *vws)
 {
+	int x;
+	int y;
 	t_wnd *ws;
 
 	ws = (t_wnd*)vws;
-	mlx_destroy_image(ws->mlx, ws->image);
 	ws->image = mlx_new_image(ws->mlx, ws->width, ws->height);
 	ws->im_buf = mlx_get_data_addr(ws->image, &(ws->bits), &(ws->sizel), &(ws->endi));
-	for (int x = -1 * ws->width / 2; x < ws->width / 2; x++)
+	x = -1 * ws->width / 2;
+	while (x < ws->width / 2)
 	{
-		for(int y = -1 * ws->height / 2; y < ws->height / 2; y++)
+		y = -1 * ws->height / 2;
+		while (y < ws->height / 2)
 		{
 			ws->ax = ws->cx + x * ws->scale;
 			ws->ay = ws->cy + y * ws->scale;
 			ws->a1 = ws->ax;
 			ws->b1 = ws->ay;
-			int i = 0;
-			while (i < ws->maxIterations && ((ws->a1 * ws->a1) + (ws->b1 * ws->b1)) <  (1 << 16))
-			{
-				i++;
-				ws->a2 = ws->a1 * ws->a1 - ws->b1 * ws->b1 + ws->ax;
-				ws->b2 = 2 * ws->a1 * ws->b1 + ws->ay;
-				ws->a1 = ws->a2;
-				ws->b1 = ws->b2;
-			}
-			if (i >= ws->maxIterations)
-				ft_putpixel(ws, x + ws->width / 2, y + ws->height / 2, 0x000000);
-			else
-				ft_putpixel(ws, x + ws->width / 2, y + ws->height / 2, i % 256);
+			ft_drawmixel(ws, x, y);
+			y++;
 		}
+		x++;
 	}
 	mlx_put_image_to_window(ws->mlx, ws->win, ws->image, 0, 0);
+	mlx_destroy_image(ws->mlx, ws->image);
+	ft_showinfo(ws);
 	return 0;
 }
 
@@ -82,7 +121,6 @@ int mouse_hook(int button, int x, int y, void *vws)
 	ws = (t_wnd*)vws;
 	if (button == 4)
 	{
-		printf("Zoom in!\n");
 		ws->cx = ws->cx + ws->scale * (x - (ws->width / 2));
 		ws->cy = ws->cy + ws->scale * (y - (ws->height / 2));
 		ws->scale = ws->scale / 2;
@@ -90,15 +128,36 @@ int mouse_hook(int button, int x, int y, void *vws)
 	}
 	else if (button == 5)
 	{
-		printf("Zoom out!\n");
 		ws->cx = ws->cx + ws->scale * (x - (ws->width / 2));
 		ws->cy = ws->cy + ws->scale * (y - (ws->height / 2));
 		ws->scale = ws->scale * 2;
 		return (ft_drawmset(ws));
 	}
-	else
-		printf("Pressed some click\n");
 	return 0;
+}
+
+int key_hook2(int k, t_wnd *ws)
+{
+	if (k == 53)
+		exit(1);
+	else if (k == 17)
+	{
+		if (ws->col_type == 0)
+			ws->col_type = 1;
+		else
+			ws->col_type = 0;
+		return (ft_drawmset(ws));
+	}
+	else if (k == 46)
+	{
+		if (ws->mmotion == 0)
+			ws->mmotion = 1;
+		else
+			ws->mmotion = 0;
+		return (ft_drawmset(ws));
+	}
+	else
+		return 0;
 }
 
 int key_hook(int k, void *vws)
@@ -106,7 +165,6 @@ int key_hook(int k, void *vws)
 	t_wnd *ws;
 
 	ws = (t_wnd*)vws;
-	printf("pressed k = %d\n", k);
 	if (k == 12)
 	{
 		ws->maxIterations += ws->decincvar;
@@ -127,10 +185,25 @@ int key_hook(int k, void *vws)
 		ft_makecolors(ws->maxIterations, ws->colors);
 		return (ft_drawmset(ws));
 	}
-	else if (k == 53)
-		exit(1);
 	else
-		return 0;
+		return (key_hook2(k, ws));
+}
+
+int ft_mactionb(int x, int y, t_wnd *ws)
+{
+	static int prevx;
+	static int prevy;
+
+	if (x >= 0 && y >= 0 && x <= ws->width && y <= ws->height && ws->mmotion == 1)
+	{
+		if (abs((prevx + prevy) - (x + y)) > 25)
+		{
+			prevx = x;
+			prevy = y;
+			ft_drawmset(ws);
+		}
+	}
+	return 0;
 }
 
 int main()
@@ -138,10 +211,11 @@ int main()
 	t_wnd *ws;
 
 	ws = malloc(sizeof(t_wnd));
-	ft_fillstruct(ws);
+	ft_fillm(ws);
 	mlx_key_hook(ws->win, &key_hook, ws);
 	mlx_mouse_hook(ws->win, &mouse_hook, ws);
 	mlx_expose_hook(ws->win, &ft_drawmset, ws);
+	mlx_hook(ws->win, MOTION_NOTIFY, PTR_MOTION_MASK, &ft_mactionb, ws);
 	mlx_loop(ws->mlx);
 	return 0;
 }

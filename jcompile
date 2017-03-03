@@ -1,2 +1,0 @@
-gcc set_julia.c -lmlx -framework OpenGL -framework AppKit
-echo "Julia Compiled!"

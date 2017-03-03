@@ -1,2 +1,0 @@
-gcc newton.c -lmlx -framework OpenGL -framework AppKit
-echo "Newton Compiled!"

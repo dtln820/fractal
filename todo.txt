@@ -4,19 +4,11 @@
 [.] Play more with zoom coordinates
 [.] Another Fractal
 [.] Refactor code
-[!] Unify the fractals in one program
-[!] Passing the argument to program for choosing fractal
-[!] Press H for help or basic key function info
+[.] Unify the fractals in one program
+[.] Passing the argument to program for choosing fractal
+[?] Press H for help or basic key function info
 [!] Norminette
-[?] Mandelbrot - rotate color map on mouse movement
-  [?] Have to pass one more argument to make_colors - basecolor
-
-Common functions:
-  ft_makecolors
-  ft_putpixel
-  ft_showinfo
-  ft_getcolor
-  mouse_hook
-  key_hook && key_hook2
-
-# In each 'sub-main' should change only ft_fill option, expose_hook and hook
+[?] Rotate color pallette (Pass one more arguments to make_colors - basecolor)
+[?] Multiple arguments - multiple windows
+[?] Displacement with arrows
+[?] For two valid args, 2 windows

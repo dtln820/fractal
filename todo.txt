@@ -6,9 +6,9 @@
 [.] Refactor code
 [.] Unify the fractals in one program
 [.] Passing the argument to program for choosing fractal
-[!] Norminette
+[.] Norminette
+[!] Makefile
 [?] Press H for help or basic key function info
 [?] Rotate color pallette (Pass one more arguments to make_colors - basecolor)
-[?] Multiple arguments - multiple windows
-[?] Displacement with arrows
-[?] For two valid args, 2 windows
+[?] Multiple arguments - multiple windows // ws[i]->...
+[?] Displacement with arrows // key_hook

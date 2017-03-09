@@ -47,22 +47,22 @@ int		ft_return(t_wnd *ws)
 
 int		key_hook3(int k, t_wnd *ws)
 {
-	if (k == 0)
+	if (k == 123)
 	{
 		ws->cx++;
 		return (ft_return(ws));
 	}
-	else if (k == 2)
+	else if (k == 124)
 	{
 		ws->cx--;
 		return (ft_return(ws));
 	}
-	else if (k == 13)
+	else if (k == 126)
 	{
 		ws->cy++;
 		return (ft_return(ws));
 	}
-	else if (k == 1)
+	else if (k == 125)
 	{
 		ws->cy--;
 		return (ft_return(ws));

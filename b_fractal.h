@@ -98,4 +98,6 @@ int					ft_initfrac(char *path, t_wnd *ws);
 
 int					ft_return(t_wnd *ws);
 
+int					key_hook3(int k, t_wnd *ws);
+
 #endif

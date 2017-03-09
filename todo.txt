@@ -8,7 +8,12 @@
 [.] Passing the argument to program for choosing fractal
 [.] Norminette
 [!] Makefile
-[?] Press H for help or basic key function info
-[?] Rotate color pallette (Pass one more arguments to make_colors - basecolor)
+[#] Press H for help or basic key function info
+[.] Rotate color pallette (Pass one more arguments to make_colors - basecolor)
 [?] Multiple arguments - multiple windows // ws[i]->...
 [?] Displacement with arrows // key_hook
+
+! - Must have
+. - Done
+? - Not necessary
+# - Rejected

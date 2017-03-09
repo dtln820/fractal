@@ -81,7 +81,7 @@ int		key_hook2(int k, t_wnd *ws)
 		return (ft_return(ws));
 	}
 	else
-		return (0);
+		return (key_hook3(k, ws));
 }
 
 int		key_hook(int k, void *vws)

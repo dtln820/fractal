@@ -44,3 +44,28 @@ int		ft_return(t_wnd *ws)
 		return (ft_drawnset(ws));
 	else return (0);
 }
+
+int		key_hook3(int k, t_wnd *ws)
+{
+	if (k == 0)
+	{
+		ws->cx++;
+		return (ft_return(ws));
+	}
+	else if (k == 2)
+	{
+		ws->cx--;
+		return (ft_return(ws));
+	}
+	else if (k == 13)
+	{
+		ws->cy++;
+		return (ft_return(ws));
+	}
+	else if (k == 1)
+	{
+		ws->cy--;
+		return (ft_return(ws));
+	}
+	return (0);
+}

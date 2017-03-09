@@ -42,7 +42,8 @@ int		ft_return(t_wnd *ws)
 		return (ft_drawjset(ws));
 	else if (ws->type == 2)
 		return (ft_drawnset(ws));
-	else return (0);
+	else
+		return (0);
 }
 
 int		key_hook3(int k, t_wnd *ws)

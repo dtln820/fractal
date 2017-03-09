@@ -11,9 +11,15 @@
 [#] Press H for help or basic key function info
 [.] Rotate color pallette (Pass one more arguments to make_colors - basecolor)
 [?] Multiple arguments - multiple windows // ws[i]->...
-[?] Displacement with arrows // key_hook
+[.] Displacement with arrows // key_hook
 
 ! - Must have
 . - Done
 ? - Not necessary
 # - Rejected
+
+[Bonus tasks implemented]
+Displacement
+Color modes
+Rotate color
+Iterations

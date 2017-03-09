@@ -12,12 +12,10 @@
 
 #include "b_fractal.h"
 
-void	ft_makecolors(int max, int *colors)
+void	ft_makecolors(int max, int *colors, int basecolor)
 {
 	int	i;
-	int	basecolor;
 
-	basecolor = 0x2E8B57;
 	i = 0;
 	while (i < max)
 	{

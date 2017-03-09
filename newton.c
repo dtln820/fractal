@@ -32,7 +32,8 @@ void	ft_filln(t_wnd *ws)
 	ws->mmotion = 0;
 	ws->type = 2;
 	ws->colors = (int*)malloc(sizeof(int) * ws->maxiterations);
-	ft_makecolors(ws->maxiterations, ws->colors);
+	ws->base_color = 0x2E8B57;
+	ft_makecolors(ws->maxiterations, ws->colors, ws->base_color);
 }
 
 void	ft_drawnixel(t_wnd *ws, int x, int y)

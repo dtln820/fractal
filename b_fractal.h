@@ -49,9 +49,10 @@ typedef	struct		s_wnd
 	long double		ay;
 	int				decincvar;
 	int				*colors;
+	int				base_color;
 }					t_wnd;
 
-void				ft_makecolors(int max, int *colors);
+void				ft_makecolors(int max, int *colors, int basecolor);
 
 void				ft_putpixel(t_wnd *ws, int x, int y, int color);
 

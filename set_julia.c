@@ -30,9 +30,10 @@ void	ft_fillj(t_wnd *ws)
 	ws->maxiterations = 200;
 	ws->col_type = 0;
 	ws->mmotion = 0;
+	ws->base_color = 0x2E8B57;
 	ws->type = 1;
 	ws->colors = (int*)malloc(sizeof(int) * ws->maxiterations);
-	ft_makecolors(ws->maxiterations, ws->colors);
+	ft_makecolors(ws->maxiterations, ws->colors, ws->base_color);
 }
 
 void	ft_drawjixel(t_wnd *ws, int x, int y)

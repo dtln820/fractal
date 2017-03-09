@@ -96,7 +96,7 @@ int		key_hook(int k, void *vws)
 			ws->decincvar = 50;
 		free(ws->colors);
 		ws->colors = (int*)malloc(sizeof(int) * ws->maxiterations);
-		ft_makecolors(ws->maxiterations, ws->colors);
+		ft_makecolors(ws->maxiterations, ws->colors, ws->base_color);
 		return (ft_return(ws));
 	}
 	else if (k == 14)
@@ -106,7 +106,7 @@ int		key_hook(int k, void *vws)
 			ws->decincvar = 10;
 		free(ws->colors);
 		ws->colors = (int*)malloc(sizeof(int) * ws->maxiterations);
-		ft_makecolors(ws->maxiterations, ws->colors);
+		ft_makecolors(ws->maxiterations, ws->colors, ws->base_color);
 		return (ft_return(ws));
 	}
 	else

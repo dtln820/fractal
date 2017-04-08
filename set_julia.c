@@ -6,7 +6,7 @@
 /*   By: ddulgher <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/04 11:56:36 by ddulgher          #+#    #+#             */
-/*   Updated: 2017/03/04 13:29:27 by ddulgher         ###   ########.fr       */
+/*   Updated: 2017/04/08 16:08:23 by ddulgher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,22 +84,12 @@ int		ft_drawjset(void *vws)
 
 int		ft_mactionj(int x, int y, t_wnd *ws)
 {
-	static int	prevx;
-	static int	prevy;
-	float		var;
-
 	if (x >= 0 && y >= 0 && x <= ws->width
 			&& y <= ws->height && ws->mmotion == 1)
 	{
-		if (abs((prevx + prevy) - (x + y)) > 25)
-		{
-			prevx = x;
-			prevy = y;
-			var = ((float)rand() / (float)(RAND_MAX)) * 2;
-			ws->ax = 0.7885 * cos(var);
-			ws->ay = 0.7885 * sin(var);
-			ft_drawjset(ws);
-		}
+		ws->ax = (x - (double)ws->width / 2) / ((double)ws->width / 2);
+		ws->ay = (y - (double)ws->height / 2) / ((double)ws->height / 2);
+		ft_drawjset(ws);
 	}
 	return (0);
 }

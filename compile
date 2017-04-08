@@ -1,2 +1,0 @@
-gcc ft_help.c newton.c set_julia.c brot.c main.c ft_common.c ft_common2.c -lmlx -framework OpenGL -framework AppKit
-echo "#[ Fractal compiled ]#"

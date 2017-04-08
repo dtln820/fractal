@@ -6,7 +6,7 @@
 /*   By: ddulgher <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/04 11:45:11 by ddulgher          #+#    #+#             */
-/*   Updated: 2017/03/04 13:28:51 by ddulgher         ###   ########.fr       */
+/*   Updated: 2017/04/08 16:07:53 by ddulgher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int		ft_showinfo(t_wnd *ws)
 {
+	mlx_string_put(ws->mlx, ws->win, 15, 70, 0xFFFFFF, "Q/E Change iterations");
+	mlx_string_put(ws->mlx, ws->win, 15, 90, 0xFFFFFF, "Arrows - displacement");
 	mlx_string_put(ws->mlx, ws->win, 5, 10, 0xFFFFFF, "INFO");
 	mlx_string_put(ws->mlx, ws->win, 15, 30, 0xFFFFFF, "Coloring: ");
 	if (ws->col_type == 1)
